@@ -148,7 +148,7 @@ docker-compose run --rm --entrypoint "\
     --force-renewal" certbot
 echo
 elif [ -x "$(command -v docker compose)" ]; then
-docker-compose run --rm --entrypoint "\
+docker compose run --rm --entrypoint "\
   certbot certonly --webroot -w /var/www/certbot \
     $staging_arg \
     $([ "$interactive" -ne 1 ] && echo '--non-interactive') \
@@ -162,4 +162,8 @@ echo
 fi
 
 echo "### Reloading scalelite-proxy..."
+if [ -x "$(command -v docker-compose)" ]; then
 docker-compose exec $([ "$interactive" -ne 1 ] && echo "-T") scalelite-proxy nginx -s reload
+elif [ -x "$(command -v docker compose)" ]; then
+docker compose exec $([ "$interactive" -ne 1 ] && echo "-T") scalelite-proxy nginx -s reload
+fi
