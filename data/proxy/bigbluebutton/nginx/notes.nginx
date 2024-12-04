@@ -1,0 +1,5 @@
+        location /notes {
+                root    /var/bigbluebutton/published;
+                index   index.html index.htm;
+        }
+

@@ -61,7 +61,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./log/recordings/:/var/log/nginx
-      - ./data/proxy/bigbluebutton/nginx:/etc/bigbluebutton/nginx
+      - ./data/proxy/bigbluebutton/nginx/notes.nginx:/etc/bigbluebutton/nginx/notes.nginx
       - ${SCALELITE_RECORDING_DIR:-/mnt/scalelite-recordings/var/bigbluebutton}/published:/var/bigbluebutton/published
     depends_on:
       - scalelite-api
