@@ -27,7 +27,7 @@ SL_HOST=
 # SCALELITE_TAG=v1
 #
 ### Required when when specific repo or version (other than defaults) are needed
-SCALELITE_DOCKER_IMAGE=blindsidenetwks/scalelite:v1.6.2
+SCALELITE_DOCKER_IMAGE=blindsidenetwks/scalelite:v1.6.3
 #
 ### Required when recordings are enabled and using BigBlueButton Playback Proxy to serve the recordings.
 SCALELITE_RECORDINGS_DOCKER_IMAGE=bigbluebutton/bbb-playback-proxy:focal-260-amazonlinux
