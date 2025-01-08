@@ -3,7 +3,7 @@
 ## Scrip based on https://github.com/wmnnd/nginx-certbot
 ## https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
 
-if ! [ -x "$(command -v docker-compose)" ] && ! [ -x "$(command -v docker compose)" ]; then
+if ! [ -x "$(command -v docker-compose | head -n 1)" ] && ! [ -x "$(command -v docker compose | head -n 1)" ]; then
   echo 'Error: docker-compose is not installed.' >&2
   exit 1
 fi
@@ -86,7 +86,7 @@ docker-compose run --rm --entrypoint "\
     -out '$path/fullchain.pem' \
     -subj '/CN=localhost'" certbot
 echo
-elif [ -x "$(command -v docker compose)" ]; then
+elif [ -x "$(command -v docker compose | head -n 1)" ]; then
 docker compose run --rm --entrypoint "\
   openssl req -x509 -nodes -newkey rsa:2048 -days 1\
     -keyout '$path/privkey.pem' \
@@ -99,7 +99,7 @@ echo "### Starting scalelite-proxy ..."
 if [ -x "$(command -v docker-compose)" ]; then
 docker-compose up --force-recreate -d scalelite-proxy
 echo
-elif [ -x "$(command -v docker compose)" ]; then
+elif [ -x "$(command -v docker compose | head -n 1)" ]; then
 docker compose up --force-recreate -d scalelite-proxy
 fi
 echo
@@ -111,7 +111,7 @@ docker-compose run --rm --entrypoint "\
   rm -Rf /etc/letsencrypt/archive/$domains && \
   rm -Rf /etc/letsencrypt/renewal/$domains.conf" certbot
 echo
-elif [ -x "$(command -v docker compose)" ]; then
+elif [ -x "$(command -v docker compose | head -n 1)" ]; then
 docker compose run --rm --entrypoint "\
   rm -Rf /etc/letsencrypt/live/$domains && \
   rm -Rf /etc/letsencrypt/archive/$domains && \
@@ -147,7 +147,7 @@ docker-compose run --rm --entrypoint "\
     --debug-challenges \
     --force-renewal" certbot
 echo
-elif [ -x "$(command -v docker compose)" ]; then
+elif [ -x "$(command -v docker compose | head -n 1)" ]; then
 docker compose run --rm --entrypoint "\
   certbot certonly --webroot -w /var/www/certbot \
     $staging_arg \
@@ -164,6 +164,6 @@ fi
 echo "### Reloading scalelite-proxy..."
 if [ -x "$(command -v docker-compose)" ]; then
 docker-compose exec $([ "$interactive" -ne 1 ] && echo "-T") scalelite-proxy nginx -s reload
-elif [ -x "$(command -v docker compose)" ]; then
+elif [ -x "$(command -v docker compose | head -n 1)" ]; then
 docker compose exec $([ "$interactive" -ne 1 ] && echo "-T") scalelite-proxy nginx -s reload
 fi
