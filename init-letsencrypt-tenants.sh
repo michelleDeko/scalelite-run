@@ -25,7 +25,7 @@ if [[ -z "$LETSENCRYPT_EMAIL" ]]; then
 fi
 
 usage() {
-  echo -e "Initializes letsencrypt certificates for Nginx proxy container\n"
+  echo -e "Initializes letsencrypt certificates for Nginx proxy container and Tenants\n"
   echo -e "Usage: $0 [-z|-r|-h]\n"
   echo "  -n|--non-interactive  Enable non interactive mode"
   echo "  -r|--replace          Replace existing certificates without asking"
@@ -47,9 +47,16 @@ do
     esac
 done
 
-domains="$SL_HOST.$DOMAIN_NAME"
+# Tenants array (add all tenants you want certificates for)
+# Example: tenants=("tenant1" "tenant2" "tenant3")
+tenants=("test" "test2" "test3")
+domains=("$SL_HOST.$DOMAIN_NAME")
 
-echo $domains
+for tenant in "${tenants[@]}"; do
+    domains+=("$tenant.$SL_HOST.$DOMAIN_NAME")
+done
+
+echo "Domains: ${domains[@]}"
 
 rsa_key_size=4096
 data_path="./data/certbot"
@@ -86,7 +93,7 @@ docker-compose run --rm --entrypoint "\
     -out '$path/fullchain.pem' \
     -subj '/CN=localhost'" certbot
 echo
-elif [ -x "$(command -v docker compose | head -n 1)" ]; then
+elif [ -x "$(command -v docker compose)" ]; then
 docker compose run --rm --entrypoint "\
   openssl req -x509 -nodes -newkey rsa:2048 -days 1\
     -keyout '$path/privkey.pem' \
@@ -99,7 +106,7 @@ echo "### Starting scalelite-proxy ..."
 if [ -x "$(command -v docker-compose)" ]; then
 docker-compose up --force-recreate -d scalelite-proxy
 echo
-elif [ -x "$(command -v docker compose | head -n 1)" ]; then
+elif [ -x "$(command -v docker compose)" ]; then
 docker compose up --force-recreate -d scalelite-proxy
 fi
 echo
@@ -111,7 +118,7 @@ docker-compose run --rm --entrypoint "\
   rm -Rf /etc/letsencrypt/archive/$domains && \
   rm -Rf /etc/letsencrypt/renewal/$domains.conf" certbot
 echo
-elif [ -x "$(command -v docker compose | head -n 1)" ]; then
+elif [ -x "$(command -v docker compose)" ]; then
 docker compose run --rm --entrypoint "\
   rm -Rf /etc/letsencrypt/live/$domains && \
   rm -Rf /etc/letsencrypt/archive/$domains && \
@@ -120,19 +127,16 @@ echo
 fi
 
 echo "### Requesting Let's Encrypt certificate for $domains ..."
-#Join $domains to -d args
 domain_args=""
 for domain in "${domains[@]}"; do
   domain_args="$domain_args -d $domain"
 done
 
-# Select appropriate email arg
 case "$email" in
   "") email_arg="--register-unsafely-without-email" ;;
   *) email_arg="--email $email" ;;
 esac
 
-# Enable staging mode if needed
 if [ $staging != "0" ]; then staging_arg="--staging"; fi
 
 if [ -x "$(command -v docker-compose)" ]; then
@@ -147,7 +151,7 @@ docker-compose run --rm --entrypoint "\
     --debug-challenges \
     --force-renewal" certbot
 echo
-elif [ -x "$(command -v docker compose | head -n 1)" ]; then
+elif [ -x "$(command -v docker compose)" ]; then
 docker compose run --rm --entrypoint "\
   certbot certonly --webroot -w /var/www/certbot \
     $staging_arg \
@@ -164,6 +168,6 @@ fi
 echo "### Reloading scalelite-proxy..."
 if [ -x "$(command -v docker-compose)" ]; then
 docker-compose exec $([ "$interactive" -ne 1 ] && echo "-T") scalelite-proxy nginx -s reload
-elif [ -x "$(command -v docker compose | head -n 1)" ]; then
+elif [ -x "$(command -v docker compose)" ]; then
 docker compose exec $([ "$interactive" -ne 1 ] && echo "-T") scalelite-proxy nginx -s reload
 fi
