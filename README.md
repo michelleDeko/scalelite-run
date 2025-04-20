@@ -1,6 +1,7 @@
 # scalelite-run
 
 A simple way to deploy Scalelite as for production using docker-compose.
+This project is a fork of jfederico's [scalelite-run](https://github.com/jfederico/scalelite-run)
 
 ## Overview
 
@@ -19,20 +20,20 @@ For those new to system administration or any of the components mentioned the ar
 
 ## Installation (short version)
 
-On an Ubuntu 22.04 machine available to the Internet (AWS EC2 instance, LXC container, VMWare machine etc).
+On an Linux machine available to the Internet (AWS EC2 instance, LXC container, VMWare machine etc).
 
 ### Prerequisites
 
 This machine needs to be updated and have installed:
 
 - Git
-- [Docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-22-04)
-- [Docker Compose](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-compose-on-ubuntu-22-04)
+- [Docker](https://docs.docker.com/engine/install/)
+- [Docker Compose](https://docs.docker.com/engine/install/)
 
 ### Fetching the scripts
 
 ```
-git clone https://github.com/jfederico/scalelite-run
+git clone https://github.com/michelleDeko/scalelite-run
 cd scalelite-run
 ```
 
