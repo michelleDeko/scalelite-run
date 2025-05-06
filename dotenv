@@ -32,7 +32,7 @@ RAILS_LOG_TO_STDOUT=true
 # SCALELITE_TAG=v1
 #
 ### Required when when specific repo or version (other than defaults) are needed
-SCALELITE_DOCKER_IMAGE=blindsidenetwks/scalelite:v1.6.4
+SCALELITE_DOCKER_IMAGE=blindsidenetwks/scalelite:v1.6.5
 #
 ### Required when recordings are enabled and using BigBlueButton Playback Proxy to serve the recordings.
 SCALELITE_RECORDINGS_DOCKER_IMAGE=ghcr.io/michelledeko/bbb-playback-proxy:jammy-300-alpine
