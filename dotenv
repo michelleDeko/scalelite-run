@@ -6,10 +6,11 @@ DOMAIN_NAME=
 LOADBALANCER_SECRET=
 SL_HOST=
 
+### Required for analytics callback to work
 URL_HOST=
 
-### Output Log in docker logs
-RAILS_LOG_TO_STDOUT=true
+### Output Log in docker logs (if true = no logging inside production.log!)
+# RAILS_LOG_TO_STDOUT=false
 
 ### Optional for scalelite-api
 # LOADBALANCER_CHECKSUM_ALGORITHM=SHA256
