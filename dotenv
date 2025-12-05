@@ -15,6 +15,18 @@ URL_HOST=
 ### Optional for scalelite-api
 # LOADBALANCER_CHECKSUM_ALGORITHM=SHA256
 
+### Optional - After how many seconds do meetings get cleaned from redis
+# DEFAULT_MEETING_TTL=
+
+### Dial In options
+### For more information: https://github.com/blindsidenetworks/scalelite/blob/master/docs/dialin-README.md
+# VOICE_BRIDGE_LEN=
+# VOICE_BRIDGE_MIN=
+# VOICE_BRIDGE_MAX=
+# USE_EXTERNAL_VOICE_BRIDGE=
+# FSAPI_PASSWORD=
+# FSAPI_MAX_DURATION=
+
 #
 ### Required by scalelite-api and scalelite-poller
 # REDIS_URL=
@@ -33,7 +45,7 @@ URL_HOST=
 # SCALELITE_TAG=v1
 #
 ### Required when when specific repo or version (other than defaults) are needed
-SCALELITE_DOCKER_IMAGE=blindsidenetwks/scalelite:v1.6.5
+SCALELITE_DOCKER_IMAGE=blindsidenetwks/scalelite:v1.6.11
 #
 ### Required when recordings are enabled and using BigBlueButton Playback Proxy to serve the recordings.
 SCALELITE_RECORDINGS_DOCKER_IMAGE=bigbluebutton/bbb-playback-proxy:jammy-300-alpine
