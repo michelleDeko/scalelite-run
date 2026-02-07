@@ -84,3 +84,32 @@ Now, the scalelite server is running, but it is not quite yet ready. The databas
 ```
 docker exec -i scalelite-api bundle exec rake db:setup
 ```
+
+The BBB servers must be added.
+
+```
+docker exec -i scalelite-api bundle exec rake servers:add[https://bbb25.example.com/bigbluebutton/api,secret]
+docker exec -i scalelite-api bundle exec rake servers:enable[bbb25.example.com]
+```
+
+## Generate LetsEncrypt SSL certificates manually
+
+Depending on if you want to use Multitenancy or not this can be done differently.
+If you only need one domain (e.g. sl.example.com) you can use the `init-letsencrypt.sh` script, that's included in this repo
+
+If you want to setup SSL with Multitenancy, you will need a wildcard certificate. In this documentation I will use DNS challenge with Cloudflare.
+For this, first get a API token from Cloudflare: [https://dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens)
+Click "Create token" and use "Edit zone DNS" as a template. Under "Zone Resources" you can now choose your domain.
+
+After you got your API token, create a file the file `/etc/letsencrypt/cloudflare.ini` with the following:
+```
+# Cloudflare API token used by Certbot
+dns_cloudflare_api_token = your-secure-token
+```
+Set the permissions: `chmod 600 /etc/letsencrypt/cloudflare.ini`
+Now we can use that file to create the wildcard certificate:
+
+```
+certbot certonly -d *.sl.example.com --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini --dns-cloudflare-propagation-seconds 60
+```
+
